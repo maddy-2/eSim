@@ -26,7 +26,7 @@ class ProjectExplorer(QtGui.QWidget):
         QTreeView::branch:open:has-children:has-siblings { border-image: none; image: url(../../images/branch-open.png); } \
         ")
         
-        for parents, children in list(self.obj_appconfig.project_explorer.items()):
+        for parents, children in self.obj_appconfig.project_explorer.items():
             os.path.join(parents)
             if os.path.exists(parents):
                 pathlist= parents.split(os.sep)

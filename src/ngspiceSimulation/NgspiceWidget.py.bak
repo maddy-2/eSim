@@ -15,7 +15,7 @@ class NgspiceWidget(QtGui.QWidget):
         self.layout = QtGui.QVBoxLayout(self)
         self.layout.addWidget(self.terminal)
         
-        print("Argument to ngspice command : ",command)        
+        print "Argument to ngspice command : ",command        
         
         if platform.system() == 'Linux':
             self.command = "cd "+projPath+";ngspice "+command
