@@ -19,9 +19,8 @@ class openSub(QtGui.QWidget):
                 None, "Open File", "../SubcircuitLibrary"))
         if self.editfile:
             self.obj_Appconfig = Appconfig()
-            self.obj_Appconfig.current_subcircuit['SubcircuitName'] = (
-                self.editfile
-            )
+            self.obj_Appconfig.current_subcircuit['SubcircuitName'] \
+                = self.editfile
             self.schname = os.path.basename(self.editfile)
             self.editfile = os.path.join(self.editfile, self.schname)
             self.cmd = "eeschema " + self.editfile + ".sch "
