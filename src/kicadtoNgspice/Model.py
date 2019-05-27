@@ -77,7 +77,8 @@ class Model(QtGui.QWidget):
 
                         try:
                             for mod in json_data["model"]:
-                                if json_data["model"][mod]["type"] == line[2] and mod == line[3]:
+                                if json_data["model"][mod]["type"] ==\
+                                 line[2] and mod == line[3]:
                                     self.obj_trac.model_entry_var
                                     [self.nextcount].setText(
                                         str(list(
@@ -104,7 +105,8 @@ class Model(QtGui.QWidget):
 
                     try:
                         for mod in json_data["model"]:
-                            if json_data["model"][mod]["type"] == line[2] and mod == line[3]:
+                            if json_data["model"][mod]["type"] ==\
+                             line[2] and mod == line[3]:
                                 self.obj_trac.model_entry_var
                                 [self.nextcount].setText(
                                     str(list(json_data
