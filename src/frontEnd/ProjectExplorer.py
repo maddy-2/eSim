@@ -107,7 +107,8 @@ class ProjectExplorer(QtGui.QWidget):
         self.save = QtGui.QPushButton('Save and Exit')
         self.save.setDisabled(True)
         self.windowgrid = QtGui.QGridLayout()
-        if (os.path.isfile(str(self.filePath))) == True:
+        # if (os.path.isfile(str(self.filePath))) == True:
+        if (os.path.isfile(str(self.filePath))):
             self.fopen = open(str(self.filePath), 'r')
             lines = self.fopen.read()
             self.text.setText(lines)
