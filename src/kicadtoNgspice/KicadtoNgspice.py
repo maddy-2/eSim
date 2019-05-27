@@ -1,4 +1,4 @@
-#=========================================================================
+# =========================================================================
 #
 #          FILE: kicadtoNgspice.py
 #
@@ -14,7 +14,7 @@
 #  ORGANIZATION: eSim team at FOSSEE, IIT Bombay.
 #       CREATED: Wednesday 04 March 2015
 #      REVISION:  ---
-#=========================================================================
+# =========================================================================
 import sys
 import os
 from PyQt4 import QtGui
@@ -28,7 +28,7 @@ from . import Convert
 from . import TrackWidget
 import json
 
-#from xml.etree import ElementTree as ET
+# from xml.etree import ElementTree as ET
 
 
 class MainWindow(QtGui.QWidget):
