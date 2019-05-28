@@ -348,6 +348,6 @@ class DockArea(QtGui.QMainWindow):
         count = count + 1
 
     def closeDock(self):
-        temp = self.obj_appconfig.current_project['ProjectName']
-        for dockwidget in self.obj_appconfig.dock_dict[temp]:
+        self.temp = self.obj_appconfig.current_project['ProjectName']
+        for dockwidget in self.obj_appconfig.dock_dict[self.temp]:
             dockwidget.close()
