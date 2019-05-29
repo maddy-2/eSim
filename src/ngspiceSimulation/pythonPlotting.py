@@ -12,6 +12,7 @@ from configuration.Appconfig import Appconfig
 import numpy as np
 
 
+# This class creates Python Plotting window
 class plotWindow(QtGui.QMainWindow):
     def __init__(self, fpath, projectName):
         QtGui.QMainWindow.__init__(self)
