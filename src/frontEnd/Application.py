@@ -472,8 +472,15 @@ class Application(QtGui.QMainWindow):
 
     # sdf
     def open_OMoptim(self):
-        '''
-        '''
+        """
+        This function uses validateTool() method from
+        Validation.py:
+            a) If 'OMOptim' is present in executables list then
+               it adds passes command 'OMOptim' to WorkerThread class of
+               Worker.py.
+            b) If 'OMOptim' not present then it shows error message with
+               link to download it on Linux and Windows.
+        """
         print("Function : OM Optim")
         self.obj_appconfig.print_info('OM Optim is called')
         # Check if OMOptim is installed
