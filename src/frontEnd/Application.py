@@ -413,7 +413,7 @@ class Application(QtGui.QMainWindow):
                 try:
                     # Creating a command for Ngspice to Modelica converter
                     self.cmd1 = "
-                        python ../ngspicetoModelica/NgspicetoModelica.py "\
+                        python3 ../ngspicetoModelica/NgspicetoModelica.py "\
                             +self.ngspiceNetlist
                     self.obj_workThread1 = Worker.WorkerThread(self.cmd1)
                     self.obj_workThread1.start()
