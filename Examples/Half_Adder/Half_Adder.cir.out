@@ -4,7 +4,7 @@
 x1 net-_u1-pad3_ net-_u1-pad4_ net-_u2-pad1_ net-_u2-pad2_ half_adder
 * u1  in1 in2 net-_u1-pad3_ net-_u1-pad4_ adc_bridge_2
 * u2  net-_u2-pad1_ net-_u2-pad2_ sum cout dac_bridge_2
-v1 in1 gnd  dc 10
+v1 in1 gnd  dc 5
 v2 in2 gnd  dc 10
 r1  sum gnd 1k
 r2  cout gnd 1k
