@@ -115,6 +115,7 @@ class plotWindow(QtGui.QMainWindow):
                 '; font-weight = bold;')
             self.top_grid.addWidget(self.colorLab, i + 3, 1)
 
+        # Buttons for Plot, multimeter, plotting function.
         self.clear = QtGui.QPushButton("Clear")
         self.warnning = QtGui.QLabel()
         self.funcName = QtGui.QLabel()
@@ -159,7 +160,10 @@ class plotWindow(QtGui.QMainWindow):
         self.scrollArea = QtGui.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setWidget(self.widget)
-
+        '''
+        Right side box containing checkbox for different inputs and
+        options of plot, multimeter and plot function.
+        '''
         self.finalhbox = QtGui.QHBoxLayout()
         self.finalhbox.addWidget(self.scrollArea)
 
@@ -219,6 +223,7 @@ class plotWindow(QtGui.QMainWindow):
 
         self.setCentralWidget(self.mainFrame)
 
+    # Defining clear funtion and plot.
     def pushedClear(self):
         self.text.clear()
         self.axes.cla()
