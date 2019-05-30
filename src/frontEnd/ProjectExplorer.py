@@ -58,12 +58,8 @@ class ProjectExplorer(QtGui.QWidget):
         for files in children:
             childnode = QtGui.QTreeWidgetItem(  # noqa
                 parentnode, [files, os.path.join(parents, files)])
-        self.obj_appconfig.proc_dict
-        [self.obj_appconfig.current_project['ProjectName']] = [
-        ]
-        self.obj_appconfig.dock_dict
-        [self.obj_appconfig.current_project['ProjectName']] = [
-        ]
+        self.obj_appconfig.proc_dict[self.obj_appconfig.current_project['ProjectName']] = []
+        self.obj_appconfig.dock_dict[self.obj_appconfig.current_project['ProjectName']] = []
 
     def openMenu(self, position):
 
@@ -128,12 +124,9 @@ class ProjectExplorer(QtGui.QWidget):
         else:
             self.obj_appconfig.current_project["ProjectName"] = str(
                 self.filePath)
-            self.obj_appconfig.proc_dict
-            [self.obj_appconfig.current_project['ProjectName']] = []
-            if self.obj_appconfig.current_project['ProjectName'] \
-                    not in self.obj_appconfig.dock_dict:
-                self.obj_appconfig.dock_dict
-                [self.obj_appconfig.current_project['ProjectName']] = []
+            self.obj_appconfig.proc_dict[self.obj_appconfig.current_project['ProjectName']] = []
+            if self.obj_appconfig.current_project['ProjectName'] not in self.obj_appconfig.dock_dict:
+                self.obj_appconfig.dock_dict[self.obj_appconfig.current_project['ProjectName']] = []
 
     def enable_save(self):
         self.save.setEnabled(True)

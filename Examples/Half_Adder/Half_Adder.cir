@@ -1,6 +1,6 @@
 * /home/mahi/Desktop/Fossee/eSim3/Examples/Half_Adder/Half_Adder.cir
 
-* EESchema Netlist Version 1.1 (Spice format) creation date: Thu May 30 11:41:21 2019
+* EESchema Netlist Version 1.1 (Spice format) creation date: Thursday 30 May 2019 11:52:32 AM IST
 
 * To exclude a component from the Spice Netlist add [Spice_Netlist_Enabled] user FIELD set to: N
 * To reorder the component spice node sequence add [Spice_Node_Sequence] user FIELD and define sequence: 2,1,0
