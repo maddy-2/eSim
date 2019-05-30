@@ -50,9 +50,9 @@ class Analysis(QtGui.QWidget):
 
             analysisfile = open(os.path.join(projpath, 'analysis'))
             content = analysisfile.readline()
-            print("=====================================================================")
+            print("=========================================================")
             print("Content of Analysis file :", content)
-            print("=====================================================================")
+            print("=========================================================")
             contentlist = content.split()
 
             if contentlist[0] == '.ac':
@@ -105,6 +105,7 @@ class Analysis(QtGui.QWidget):
     - checkbox > checkgrid > checkgroupbtn > checkAC | checkDC | checkTRAN
     - Trigger enableBox on clicking
     '''
+
     def createCheckBox(self):
         self.checkbox = QtGui.QGroupBox()
         self.checkbox.setTitle("Select Analysis Type")
@@ -132,6 +133,7 @@ class Analysis(QtGui.QWidget):
     - Activate deactive analysis areas according to type
     - Add analysis data to track_obj from TrackWidget
     '''
+
     def enableBox(self):
         if self.checkAC.isChecked():
             self.acbox.setDisabled(False)
@@ -158,6 +160,7 @@ class Analysis(QtGui.QWidget):
     - If previous values exist then fill default values from
       previous value json file
     '''
+
     def createACgroup(self):
         kicadFile = self.clarg1
         (projpath, filename) = os.path.split(kicadFile)
@@ -310,6 +313,7 @@ class Analysis(QtGui.QWidget):
     - - stop frequency for ac
     - And accordingly set the ac_parameters
     '''
+
     def start_combovalue(self, text):
         self.ac_parameter[0] = str(text)
 
@@ -319,6 +323,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Set track object for AC, according to the type of radio box selected
     '''
+
     def set_ac_type(self):
         self.parameter_cnt = 0
 
@@ -334,6 +339,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Create DC area under analysis tab
     '''
+
     def createDCgroup(self):
         kicadFile = self.clarg1
         (projpath, filename) = os.path.split(kicadFile)
@@ -609,6 +615,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Below 6 functions to handle combo boxes for the DC group
     '''
+
     def start_changecombo(self, text):
         self.dc_parameter[0] = str(text)
 
@@ -630,6 +637,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Handles the Operating point analysis checkbox
     '''
+
     def setflag(self):
         if self.check.isChecked():
             self.track_obj.op_check.append(1)
@@ -639,6 +647,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Creating transient group under analysis and creating it's components
     '''
+
     def createTRANgroup(self):
         kicadFile = self.clarg1
         (projpath, filename) = os.path.split(kicadFile)
@@ -771,6 +780,7 @@ class Analysis(QtGui.QWidget):
     '''
     - Below 3 functions handle event for the combo box in transient group
     '''
+
     def start_combo_change(self, text):
         self.tran_parameter[0] = str(text)
 

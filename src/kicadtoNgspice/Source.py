@@ -37,9 +37,10 @@ class Source(QtGui.QWidget):
     - Also check if any default values present from previous analysis and add
       them by default
     """
+
     def createSourceWidget(self, sourcelist, sourcelisttrack):
         print("============================================================")
-        print("SOURCELISTTRACK",sourcelisttrack)
+        print("SOURCELISTTRACK", sourcelisttrack)
         print("============================================================")
         kicadFile = self.clarg1
         (projpath, filename) = os.path.split(kicadFile)
@@ -339,8 +340,8 @@ class Source(QtGui.QWidget):
                                             list(
                                                 json_data["source"][key]
                                                 ["values"][it - 4].values())[0]
-                                                )
-                                                )
+                                        )
+                                    )
                         except BaseException:
                             pass
 
@@ -363,7 +364,7 @@ class Source(QtGui.QWidget):
 
         else:
             print("No source is present in your circuit")
-            
+
         print("============================================================")
         # This is used to keep the track of dynamically created widget
         self.obj_track.sourcelisttrack["ITEMS"] = sourcelisttrack
