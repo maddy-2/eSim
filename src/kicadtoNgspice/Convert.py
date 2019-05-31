@@ -39,7 +39,7 @@ class Convert:
                         str(self.entry_var[self.start].text())) > 0 else '0'
                     va_val = str(
                         self.entry_var[self.start + 1].text()
-                        ) if len(
+                    ) if len(
                         str(self.entry_var[self.start + 1].text())) \
                         > 0 else '0'
                     freq_val = str(self.entry_var[self.start + 2].text()) \
@@ -205,6 +205,8 @@ class Convert:
         self.direct = self.clarg1
         (filepath, filemname) = os.path.split(self.direct)
         self.Fileopen = os.path.join(filepath, "analysis")
+        print("======================================================")
+        print("FILEOPEN CONVERT ANALYS", self.Fileopen)
         self.writefile = open(self.Fileopen, "w")
         if self.variable == 'AC':
             self.no = 0
@@ -440,7 +442,10 @@ class Convert:
                             param = key
                             default = 0
                         # Cheking if value is iterable.its for vector
-                        if hasattr(value, '__iter__') and type(value) is not str:
+                        if (
+                            hasattr(value, '__iter__')
+                            and type(value) is not str
+                        ):
                             addmodelLine += param + "=["
                             for lineVar in value:
                                 if str(

@@ -4,8 +4,16 @@ import json
 from configuration.Appconfig import Appconfig
 
 
+# This is main class for Project Explorer Area.
 class ProjectExplorer(QtGui.QWidget):
+    """ """
+
     def __init__(self):
+        """
+        This method is doing following tasks:
+            a)initializing objects used in full program.
+            b)view of project explorer area.
+        """
         QtGui.QWidget.__init__(self)
         self.obj_appconfig = Appconfig()
         self.treewidget = QtGui.QTreeWidget()
@@ -37,7 +45,7 @@ class ProjectExplorer(QtGui.QWidget):
             os.path.join(parents)
             if os.path.exists(parents):
                 pathlist = parents.split(os.sep)
-                parentnode = QtGui.QTreeWidgetItem(
+                parentnode = QtGui.QTreeWidgetItem(function
                     self.treewidget, [pathlist[-1], parents])
                 for files in children:
                     childnode = QtGui.QTreeWidgetItem(  # noqa
@@ -56,16 +64,23 @@ class ProjectExplorer(QtGui.QWidget):
         parentnode = QtGui.QTreeWidgetItem(
             self.treewidget, [pathlist[-1], parents])
         for files in children:
-            childnode = QtGui.QTreeWidgetItem(  # noqa
-                parentnode, [files, os.path.join(parents, files)])
-        self.obj_appconfig.proc_dict[self.obj_appconfig.current_project['ProjectName']] = []
-        self.obj_appconfig.dock_dict[self.obj_appconfig.current_project['ProjectName']] = []
+            childnode = QtGui.QTreeWidgetItem( # noqa
+                parentnode, [files, os.path.join(parents, files)] # noqa
+                ) # noqa
+
+        (
+            self.obj_appconfig.
+            proc_dict[self.obj_appconfig.current_project['ProjectName']]
+        ) = []
+        (
+            self.obj_appconfig.
+            dock_dict[self.obj_appconfig.current_project['ProjectName']]
+        ) = []
 
     def openMenu(self, position):
 
         indexes = self.treewidget.selectedIndexes()
         if len(indexes) > 0:
-
             level = 0
             index = indexes[0]
             while index.parent().isValid():
@@ -124,20 +139,35 @@ class ProjectExplorer(QtGui.QWidget):
         else:
             self.obj_appconfig.current_project["ProjectName"] = str(
                 self.filePath)
-            self.obj_appconfig.proc_dict[self.obj_appconfig.current_project['ProjectName']] = []
-            if self.obj_appconfig.current_project['ProjectName'] not in self.obj_appconfig.dock_dict:
-                self.obj_appconfig.dock_dict[self.obj_appconfig.current_project['ProjectName']] = []
+            (
+                self.obj_appconfig.
+                proc_dict[self.obj_appconfig.current_project['ProjectName']]
+            ) = []
+            if (
+                self.obj_appconfig.current_project['ProjectName'] not in
+                self.obj_appconfig.dock_dict
+            ):
+                (
+                    self.obj_appconfig.
+                    dock_dict[
+                        self.obj_appconfig.current_project['ProjectName']]
+                ) = []
 
+    # This function is enabling save button option.
     def enable_save(self):
         self.save.setEnabled(True)
 
+    # This function is saving data before it closes the given file.
     def save_data(self):
         self.fopen = open(self.filePath, 'w')
         self.fopen.write(self.text.toPlainText())
         self.fopen.close()
         self.textwindow.close()
 
+    # This function removes the project in explorer area by right
+    # clicking on project and selecting remove option.
     def removeProject(self):
+        """ """
         self.indexItem = self.treewidget.currentIndex()
         filename = str(self.indexItem.data())  # noqa
         self.filePath = str(
@@ -154,7 +184,10 @@ class ProjectExplorer(QtGui.QWidget):
         json.dump(self.obj_appconfig.project_explorer,
                   open(self.obj_appconfig.dictPath, 'w'))
 
+    # This function refresh the project in explorer area by right
+    # clicking on project and selecting refresh option.
     def refreshProject(self):
+        """ """
         self.indexItem = self.treewidget.currentIndex()
         filename = str(self.indexItem.data())  # noqa
         self.filePath = str(

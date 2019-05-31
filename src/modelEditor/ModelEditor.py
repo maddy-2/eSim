@@ -114,6 +114,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Change state of other buttons accordingly, ex. enable diode, bjt, ...
     - Validate filename created, to check if one already exists
     '''
+
     def opennew(self):
         self.addbtn.setHidden(True)
         try:
@@ -145,6 +146,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Set states for other elements
     - Diode has no types, so hide that
     '''
+
     def diode_click(self):
         self.openfiletype('Diode')
         self.types.setHidden(True)
@@ -157,6 +159,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Open the default type in the table
     - Add an event listener for type-selection event
     '''
+
     def bjt_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -177,6 +180,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Open the default type in the table
     - Add an event listener for type-selection event
     '''
+
     def mos_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -198,6 +202,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Open the default type in the table
     - Add an event listener for type-selection event
     '''
+
     def jfet_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -214,6 +219,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Open the default type in the table
     - Add an event listener for type-selection event
     '''
+
     def igbt_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -229,6 +235,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Add an event listener for type-selection event
     - No types here, only one view
     '''
+
     def magnetic_click(self):
         self.openfiletype('Magnetic Core')
         self.types.setHidden(True)
@@ -238,6 +245,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Get the type clicked, from text
     - Open appropriate table using openfiletype(filetype)
     '''
+
     def setfiletype(self, text):
         self.filetype = str(text)
         self.openfiletype(self.filetype)
@@ -247,6 +255,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Accordingly call `createtable(path)` to draw tables usingg QTable
     - Check for the state of button before rendering
     '''
+
     def openfiletype(self, filetype):
         self.path = '../deviceModelLibrary/Templates'
         if self.diode.isChecked():
@@ -308,6 +317,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Create table for the selected .lib file using `self.createtable(path)`
     - Handle exception of no file selected
     '''
+
     def openedit(self):
         os.chdir(self.savepathtest)
         self.newflag = 0
@@ -342,6 +352,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Show the extracted data in QTableWidget
     - Can edit QTable inplace, connect `edit_modeltable` function for editing
     '''
+
     def createtable(self, modelfile):
         self.savebtn.setDisabled(False)
         self.addbtn.setHidden(False)
@@ -393,6 +404,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Edit name and value as per needed
     - Add the val name pair in the modeldict
     '''
+
     def edit_modeltable(self):
         self.savebtn.setDisabled(False)
         try:
@@ -412,6 +424,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Accordingly add parameter and value in modeldict as well as table
     - text1 => parameter, text2 => value
     '''
+
     def addparameters(self):
         text1, ok = QtGui.QInputDialog.getText(
             self, 'Parameter', 'Enter Parameter')
@@ -442,6 +455,7 @@ class ModelEditorclass(QtGui.QWidget):
     - If new file created, call `createXML` file
     - Else call `savethefile`
     '''
+
     def savemodelfile(self):
         if self.newflag == 1:
             self.createXML(self.model_name)
@@ -454,6 +468,7 @@ class ModelEditorclass(QtGui.QWidget):
     - For each component, separate folder is there
     - Check the contents of .lib and .xml file to understand their structure
     '''
+
     def createXML(self, model_name):
         root = ET.Element("library")
         ET.SubElement(root, "model_name").text = model_name
@@ -597,6 +612,7 @@ class ModelEditorclass(QtGui.QWidget):
     - This function checks if the file (xml type) with the name already exists
     - Accordingly show error message
     '''
+
     def validation(self, text):
         newfilename = text + '.xml'
 
@@ -614,6 +630,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Create .lib and .xml file for the editfile path and replace them
     - Also print Updated Library with libpath in the command window
     '''
+
     def savethefile(self, editfile):
         xmlpath, file = os.path.split(editfile)
         filename = os.path.splitext(file)[0]
@@ -647,6 +664,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Remove the whole row from QTable Widget
     - Remove the param,value pair from modeldict
     '''
+
     def removeparameter(self):
         self.savebtn.setDisabled(False)
         index = self.modeltable.currentIndex()
@@ -664,6 +682,7 @@ class ModelEditorclass(QtGui.QWidget):
     - Save it in `User Libraries` with the given name,
       and input from uploaded file
     '''
+
     def converttoxml(self):
         os.chdir(self.savepathtest)
         self.addbtn.setHidden(True)
