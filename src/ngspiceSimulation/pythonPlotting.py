@@ -14,6 +14,11 @@ import numpy as np
 
 # This class creates Python Plotting window
 class plotWindow(QtGui.QMainWindow):
+    '''
+    This class defines python plotting window, its features, buttons,
+    colors, AC and DC analysis, plotting etc.
+    '''
+
     def __init__(self, fpath, projectName):
         QtGui.QMainWindow.__init__(self)
         self.fpath = fpath
@@ -138,7 +143,7 @@ class plotWindow(QtGui.QMainWindow):
         self.palette2.setColor(QtGui.QPalette.Foreground, QtCore.Qt.red)
         self.funcName.setPalette(self.palette1)
         self.funcExample.setPalette(self.palette2)
-
+        # Widgets for grid, plot button and multimeter button.
         self.right_vbox.addLayout(self.top_grid)
         self.right_vbox.addWidget(self.plotbtn)
         self.right_vbox.addWidget(self.multimeterbtn)
@@ -167,7 +172,7 @@ class plotWindow(QtGui.QMainWindow):
         '''
         self.finalhbox = QtGui.QHBoxLayout()
         self.finalhbox.addWidget(self.scrollArea)
-
+        # Right side window frame showing list of nodes and branches.
         self.mainFrame.setLayout(self.finalhbox)
         self.showMaximized()
 
@@ -194,7 +199,7 @@ class plotWindow(QtGui.QMainWindow):
             self.multimeterbtn,
             QtCore.SIGNAL('clicked()'),
             self.multiMeter)
-
+        # for AC analysis
         if self.plotType[0] == 0:
             self.analysisType.setText("<b>AC Analysis</b>")
             if self.plotType[1] == 1:
@@ -207,7 +212,7 @@ class plotWindow(QtGui.QMainWindow):
                     self.plotbtn,
                     QtCore.SIGNAL('clicked()'),
                     self.onPush_ac)
-
+        # for transient analysis
         elif self.plotType[0] == 1:
             self.analysisType.setText("<b>Transient Analysis</b>")
             self.connect(
@@ -216,6 +221,7 @@ class plotWindow(QtGui.QMainWindow):
                 self.onPush_trans)
 
         else:
+            # For DC analysis
             self.analysisType.setText("<b>DC Analysis</b>")
             self.connect(
                 self.plotbtn,
@@ -224,7 +230,7 @@ class plotWindow(QtGui.QMainWindow):
 
         self.setCentralWidget(self.mainFrame)
 
-    # Defining clear funtion and plot.
+    # definition of functions pushedClear, pushedPlotFunc.
     def pushedClear(self):
         self.text.clear()
         self.axes.cla()
@@ -381,6 +387,8 @@ class plotWindow(QtGui.QMainWindow):
         self.combo1 = []
         self.combo1_rev = []
 
+    # definition of functions onPush_decade, onPush_ac, onPush_trans,\
+    # onPush_dc, color and multimeter and getRMSValue.
     def onPush_decade(self):
         # print "Calling on push Decade"
         boxCheck = 0
@@ -564,7 +572,7 @@ class DataExtraction:
         self.x = []  # stores x-axis data
 
     def numberFinder(self, fpath):
-        # Opening ANalysis file
+        # Opening Analysis file
         with open(os.path.join(fpath, "analysis")) as f3:
             self.analysisInfo = f3.read()
         self.analysisInfo = self.analysisInfo.split(" ")
