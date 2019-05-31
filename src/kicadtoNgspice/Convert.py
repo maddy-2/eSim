@@ -205,6 +205,8 @@ class Convert:
         self.direct = self.clarg1
         (filepath, filemname) = os.path.split(self.direct)
         self.Fileopen = os.path.join(filepath, "analysis")
+        print("======================================================")
+        print("FILEOPEN CONVERT ANALYS", self.Fileopen)
         self.writefile = open(self.Fileopen, "w")
         if self.variable == 'AC':
             self.no = 0
