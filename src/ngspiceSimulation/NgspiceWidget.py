@@ -13,6 +13,7 @@ class NgspiceWidget(QtGui.QWidget):
 
     def __init__(self, command, projPath):
         QtGui.QWidget.__init__(self)
+
         self.obj_appconfig = Appconfig()
         self.process = QtCore.QProcess(self)
         self.terminal = QtGui.QWidget(self)
@@ -40,5 +41,7 @@ class NgspiceWidget(QtGui.QWidget):
             projPath = self.obj_appconfig.current_project["ProjectName"]
             os.chdir(projPath)
             self.command = "ngspice " + command
-            self.process.start(self.command)
+            print("WINDOWS COMMAND ================")
+            print(self.command)
+            self.process.start("ngspice", [command])
             os.chdir(tempdir)
