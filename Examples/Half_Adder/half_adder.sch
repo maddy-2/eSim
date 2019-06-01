@@ -1,41 +1,11 @@
-EESchema Schematic File Version 2
+EESchema Schematic File Version 4
 LIBS:power
 LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
 LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:special
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
 LIBS:audio
 LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:eSim_Analog
-LIBS:eSim_Devices
-LIBS:eSim_Digital
-LIBS:eSim_Hybrid
-LIBS:eSim_Sources
-LIBS:eSim_Subckt
-EELAYER 25 0
+LIBS:Half_Adder-cache
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -116,7 +86,7 @@ F 3 "" H 6700 3750 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	5200 2950 4450 2950
+	5200 2950 5000 2950
 Wire Wire Line
 	4450 2950 4450 3000
 Wire Wire Line
@@ -126,7 +96,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 3450 4550 3050
 Wire Wire Line
-	4550 3050 5200 3050
+	4550 3050 4850 3050
 Wire Wire Line
 	5250 3700 5000 3700
 Wire Wire Line
@@ -149,4 +119,8 @@ Text Notes 6200 2950 0    60   ~ 0
 SUM\n
 Text Notes 6200 3650 0    60   ~ 0
 COUT\n
+Wire Wire Line
+	5000 2950 4450 2950
+Wire Wire Line
+	4850 3050 5200 3050
 $EndSCHEMATC
