@@ -1,14 +1,15 @@
 * /home/fossee/updatedexamples/fullwavebridgerectifier/fullwavebridgerectifier.cir
 
-v1  in1 in2 sine(0 0 0 0 0)
-d1  in1 out d
-d3  in2 out d
-d2  gnd in1 d
-d4  gnd in2 d
+.include D.lib
+v1  in1 in2 sine(0 5 50 0 0)
+d1 in1 out 1N4148
+d3 in2 out 1N4148
+d2 gnd in1 1N4148
+d4 gnd in2 1N4148
 r1  out gnd 1k
 * u2  out plot_v1
 * u1  in1 in2 plot_v2
-.ac lin 4 50Hz 20Hz
+.tran 10e-03 100e-03 0e-03
 
 * Control Statements 
 .control

@@ -1,1 +1,1 @@
-.ac lin 4 50Hz 20Hz
+.tran 10e-03 100e-03 0e-03

@@ -136,7 +136,6 @@ class Analysis(QtGui.QWidget):
 
         return self.checkbox
 
-
     def enableBox(self):
         """
         - Activate deactive analysis areas according to type
