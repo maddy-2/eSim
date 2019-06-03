@@ -1,5 +1,0 @@
-.title KiCad schematic
-U2 Net-_U1-Pad1_ Net-_U1-Pad2_ Net-_U1-Pad3_ d_xor
-U3 Net-_U1-Pad1_ Net-_U1-Pad2_ Net-_U1-Pad4_ d_and
-U1 Net-_U1-Pad1_ Net-_U1-Pad2_ Net-_U1-Pad3_ Net-_U1-Pad4_ PORT
-.end

@@ -1,8 +1,8 @@
 * Subcircuit lm7805
 .subckt lm7805 net-_q16-pad1_ net-_q10-pad3_ net-_q12-pad1_ 
 * c:\users\malli\esim\src\subcircuitlibrary\lm7805\lm7805.cir
-.include NPN.lib
 .include PNP.lib
+.include NPN.lib
 r1  net-_q16-pad1_ net-_q1-pad2_ 100k
 r2  net-_q16-pad1_ net-_q1-pad1_ 500
 r3  net-_q1-pad3_ net-_q2-pad2_ 3.3k
