@@ -1261,7 +1261,7 @@ class NgMoConverter:
 
 def main(args):
     """
-    It is main function of module Ngspice to Modelica converter
+    It is main function of module Ngspice to Modelica converter.
     """
     if len(sys.argv) == 3:
         filename = sys.argv[1]

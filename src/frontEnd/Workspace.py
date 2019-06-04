@@ -20,9 +20,11 @@ from configuration.Appconfig import Appconfig
 import time
 import os
 
+
 # This class creates Workspace GUI.
 class Workspace(QtGui.QWidget):
     """
+    This class contins the function for:
 
     """
 
@@ -35,7 +37,7 @@ class Workspace(QtGui.QWidget):
 
     def initWorkspace(self):
         # print "Calling workspace"
-
+        """This method is working as constructor for class Workspace"""
         self.mainwindow = QtGui.QVBoxLayout()
         self.split = QtGui.QSplitter()
         self.split.setOrientation(QtCore.Qt.Vertical)
