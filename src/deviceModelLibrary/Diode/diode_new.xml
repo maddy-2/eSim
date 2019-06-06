@@ -1,0 +1,1 @@
+<library><model_name>D</model_name><ref_model>diode_new</ref_model><param><Vj>1</Vj><Cjo>1.700E-12</Cjo><Is>2.495E-09</Is><Rs>4.755E-01</Rs><M>1.959E-01</M><N>1.679E+00</N><Bv>1.000E+02</Bv><tt>3.030E-09</tt><Ibv>1.000E-04</Ibv></param></library>

@@ -6,16 +6,39 @@ import os
 
 
 class ModelEditorclass(QtGui.QWidget):
+    '''
+    - Initialise the layout for dockarea
+    - Use QVBoxLayout, QSplitter, QGridLayout to define the layout
+    - Initalise directory to save new models,
+      savepathtest = '../deviceModelLibrary'
+    - Initialise buttons and options ====>
+    - - Name            Function Called
+    ========================================
+    - - New             opennew
+    - - Edit            openedit
+    - - Save            savemodelfile
+    - - Upload          converttoxml
+    - - Add             addparameters
+    - - Remove          removeparameter
+    - - Diode           diode_click
+    - - BJT             bjt_click
+    - - MOS             mos_click
+    - - JFET            jfet_click
+    - - IGBT            igbt_click
+    - - Magnetic Core   magnetic_click
+    '''
+
     def __init__(self):
         QtGui.QWidget.__init__(self)
         self.savepathtest = '../deviceModelLibrary'
         self.obj_appconfig = Appconfig()
-        self.newflag=0
+        self.newflag = 0
         self.layout = QtGui.QVBoxLayout()
-        self.splitter= QtGui.QSplitter()
-        self.grid= QtGui.QGridLayout()
+        self.splitter = QtGui.QSplitter()
+        self.grid = QtGui.QGridLayout()
         self.splitter.setOrientation(QtCore.Qt.Vertical)
-        
+
+        # Initialise the table view
         self.modeltable = QtGui.QTableWidget()
 
         self.newbtn = QtGui.QPushButton('New')
@@ -35,15 +58,16 @@ class ModelEditorclass(QtGui.QWidget):
         self.addbtn.setHidden(True)
         self.addbtn.clicked.connect(self.addparameters)
         self.uploadbtn = QtGui.QPushButton('Upload')
-        self.uploadbtn.setToolTip('<b>Uploading external .lib file to eSim</b>')
+        self.uploadbtn.setToolTip(
+            '<b>Uploading external .lib file to eSim</b>')
         self.uploadbtn.clicked.connect(self.converttoxml)
-        self.grid.addWidget(self.newbtn, 1,2)
-        self.grid.addWidget(self.editbtn, 1,3)
-        self.grid.addWidget(self.savebtn, 1,4)
-        self.grid.addWidget(self.uploadbtn, 1,5)
-        self.grid.addWidget(self.removebtn, 8,4)
-        self.grid.addWidget(self.addbtn, 5,4)
-    
+        self.grid.addWidget(self.newbtn, 1, 2)
+        self.grid.addWidget(self.editbtn, 1, 3)
+        self.grid.addWidget(self.savebtn, 1, 4)
+        self.grid.addWidget(self.uploadbtn, 1, 5)
+        self.grid.addWidget(self.removebtn, 8, 4)
+        self.grid.addWidget(self.addbtn, 5, 4)
+
         self.radiobtnbox = QtGui.QButtonGroup()
         self.diode = QtGui.QRadioButton('Diode')
         self.diode.setDisabled(True)
@@ -57,7 +81,7 @@ class ModelEditorclass(QtGui.QWidget):
         self.igbt.setDisabled(True)
         self.magnetic = QtGui.QRadioButton('Magnetic Core')
         self.magnetic.setDisabled(True)
-        
+
         self.radiobtnbox.addButton(self.diode)
         self.diode.clicked.connect(self.diode_click)
         self.radiobtnbox.addButton(self.bjt)
@@ -70,32 +94,40 @@ class ModelEditorclass(QtGui.QWidget):
         self.igbt.clicked.connect(self.igbt_click)
         self.radiobtnbox.addButton(self.magnetic)
         self.magnetic.clicked.connect(self.magnetic_click)
-        
-        self.types= QtGui.QComboBox()
+
+        # Dropdown for various types supported by that element, ex bjt -> npn
+        self.types = QtGui.QComboBox()
         self.types.setHidden(True)
-          
-        self.grid.addWidget(self.types,2,2,2,3)
-        self.grid.addWidget(self.diode, 3,1)
-        self.grid.addWidget(self.bjt,4,1)
-        self.grid.addWidget(self.mos,5,1)
-        self.grid.addWidget(self.jfet,6,1)
-        self.grid.addWidget(self.igbt,7,1)
-        self.grid.addWidget(self.magnetic,8,1)
+
+        self.grid.addWidget(self.types, 2, 2, 2, 3)
+        self.grid.addWidget(self.diode, 3, 1)
+        self.grid.addWidget(self.bjt, 4, 1)
+        self.grid.addWidget(self.mos, 5, 1)
+        self.grid.addWidget(self.jfet, 6, 1)
+        self.grid.addWidget(self.igbt, 7, 1)
+        self.grid.addWidget(self.magnetic, 8, 1)
         self.setLayout(self.grid)
         self.show()
-    
-    '''To create New Model file '''
+
+    '''
+    - To create New Model file
+    - Change state of other buttons accordingly, ex. enable diode, bjt, ...
+    - Validate filename created, to check if one already exists
+    '''
+
     def opennew(self):
         self.addbtn.setHidden(True)
         try:
             self.removebtn.setHidden(True)
             self.modeltable.setHidden(True)
-        except:
+        except BaseException:
             pass
         os.chdir(self.savepathtest)
-        text, ok = QtGui.QInputDialog.getText(self, 'New Model','Enter Model Name:')
+        # Opens new dialog box
+        text, ok = QtGui.QInputDialog.getText(
+            self, 'New Model', 'Enter Model Name:')
         if ok:
-            self.newflag=1
+            self.newflag = 1
             self.diode.setDisabled(False)
             self.bjt.setDisabled(False)
             self.mos.setDisabled(False)
@@ -105,21 +137,49 @@ class ModelEditorclass(QtGui.QWidget):
             self.modelname = (str(text))
         else:
             pass
-        
+        # Validate if the file created exists already or not
+        # Show error accordingly
         self.validation(text)
-            
+
+    '''
+    - Call function, openfiletype, which opens the table view for Diode specs
+    - Set states for other elements
+    - Diode has no types, so hide that
+    '''
+
     def diode_click(self):
         self.openfiletype('Diode')
         self.types.setHidden(True)
- 
+
+    '''
+    - Set states for other elements
+    - Initialise types combo box elements
+    - - NPN
+    - - PNP
+    - Open the default type in the table
+    - Add an event listener for type-selection event
+    '''
+
     def bjt_click(self):
         self.types.setHidden(False)
         self.types.clear()
         self.types.addItem('NPN')
         self.types.addItem('PNP')
+        # Open in table default
         filetype = str(self.types.currentText())
         self.openfiletype(filetype)
+        # When element selected from combo box, call setfiletype
         self.types.activated[str].connect(self.setfiletype)
+
+    '''
+    - Set states for other elements
+    - Initialise types combo box elements
+    - - NMOS(Level-1 5um)
+    - - NMOS(Level-3 0.5um)
+    - - ...
+    - Open the default type in the table
+    - Add an event listener for type-selection event
+    '''
 
     def mos_click(self):
         self.types.setHidden(False)
@@ -133,7 +193,16 @@ class ModelEditorclass(QtGui.QWidget):
         filetype = str(self.types.currentText())
         self.openfiletype(filetype)
         self.types.activated[str].connect(self.setfiletype)
-        
+
+    '''
+    - Set states for other elements
+    - Initialise types combo box elements
+    - - N-JFET
+    - - P-JFET
+    - Open the default type in the table
+    - Add an event listener for type-selection event
+    '''
+
     def jfet_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -142,7 +211,15 @@ class ModelEditorclass(QtGui.QWidget):
         filetype = str(self.types.currentText())
         self.openfiletype(filetype)
         self.types.activated[str].connect(self.setfiletype)
-        
+        '''
+    - Set states for other elements
+    - Initialise types combo box elements
+    - - N-IGBT
+    - - P-IGBT
+    - Open the default type in the table
+    - Add an event listener for type-selection event
+    '''
+
     def igbt_click(self):
         self.types.setHidden(False)
         self.types.clear()
@@ -151,27 +228,43 @@ class ModelEditorclass(QtGui.QWidget):
         filetype = str(self.types.currentText())
         self.openfiletype(filetype)
         self.types.activated[str].connect(self.setfiletype)
-        
+    '''
+    - Set states for other elements
+    - Initialise types combo box elements
+    - Open the default type in the table
+    - Add an event listener for type-selection event
+    - No types here, only one view
+    '''
+
     def magnetic_click(self):
         self.openfiletype('Magnetic Core')
         self.types.setHidden(True)
-        
-    def setfiletype(self,text):
+
+    '''
+    - Triggered when each type selected
+    - Get the type clicked, from text
+    - Open appropriate table using openfiletype(filetype)
+    '''
+
+    def setfiletype(self, text):
         self.filetype = str(text)
         self.openfiletype(self.filetype)
-    
-    def openfiletype(self,filetype):
-        '''
-        Select the path of the file to be opened depending upon selected file type 
-        '''
+
+    '''
+    - Select path for the filetype passed
+    - Accordingly call `createtable(path)` to draw tables usingg QTable
+    - Check for the state of button before rendering
+    '''
+
+    def openfiletype(self, filetype):
         self.path = '../deviceModelLibrary/Templates'
         if self.diode.isChecked():
             if filetype == 'Diode':
-                path = os.path.join(self.path,'D.xml')
+                path = os.path.join(self.path, 'D.xml')
                 self.createtable(path)
         if self.bjt.isChecked():
             if filetype == 'NPN':
-                path = os.path.join(self.path,'NPN.xml')
+                path = os.path.join(self.path, 'NPN.xml')
                 self.createtable(path)
             elif filetype == 'PNP':
                 path = os.path.join(self.path, 'PNP.xml')
@@ -213,12 +306,21 @@ class ModelEditorclass(QtGui.QWidget):
             if filetype == 'Magnetic Core':
                 path = os.path.join(self.path, 'CORE.xml')
                 self.createtable(path)
-        else :
+        else:
             pass
-        
+
+    '''
+    - When `Edit` button clicked, this function called
+    - Set states for other buttons accordingly
+    - Open the file selector box with path as deviceModelLibrary
+      and filetype set as .lib, save it in `self.editfile`
+    - Create table for the selected .lib file using `self.createtable(path)`
+    - Handle exception of no file selected
+    '''
+
     def openedit(self):
         os.chdir(self.savepathtest)
-        self.newflag=0
+        self.newflag = 0
         self.addbtn.setHidden(True)
         self.types.setHidden(True)
         self.diode.setDisabled(True)
@@ -228,16 +330,30 @@ class ModelEditorclass(QtGui.QWidget):
         self.bjt.setDisabled(True)
         self.magnetic.setDisabled(True)
         try:
-            self.editfile=str(QtGui.QFileDialog.getOpenFileName(self,"Open Library Directory","../deviceModelLibrary","*.lib"))
+            self.editfile = str(
+                QtGui.QFileDialog.getOpenFileName(
+                    self,
+                    "Open Library Directory",
+                    "../deviceModelLibrary",
+                    "*.lib"))
             self.createtable(self.editfile)
-        except:
+        except BaseException:
             print("No File selected for edit")
             pass
-        
+
+    '''
+    - Set states for other components
+    - Initialise QTable widget
+    - Set options for QTable widget
+    - Place QTable widget, using `self.grid.addWidget`
+    - Select the `.xml` file from the modelfile passed as `.lib`
+    - Use ET (xml.etree.ElementTree) to parse the xml file
+    - Extract data from the XML and store it in `modeldict`
+    - Show the extracted data in QTableWidget
+    - Can edit QTable inplace, connect `edit_modeltable` function for editing
+    '''
+
     def createtable(self, modelfile):
-        '''
-        This function Creates the model table by parsing the .xml file
-        '''
         self.savebtn.setDisabled(False)
         self.addbtn.setHidden(False)
         self.removebtn.setHidden(False)
@@ -247,85 +363,114 @@ class ModelEditorclass(QtGui.QWidget):
         self.modeltable.resizeColumnsToContents()
         self.modeltable.setColumnCount(2)
         self.modeltable.resizeRowsToContents()
-        self.modeltable.resize(200,200)
-        self.grid.addWidget(self.modeltable, 3,2,8,2)
+        self.modeltable.resize(200, 200)
+        self.grid.addWidget(self.modeltable, 3, 2, 8, 2)
         filepath, filename = os.path.split(self.modelfile)
-        base, ext= os.path.splitext(filename)      
-        self.modelfile = os.path.join(filepath, base+'.xml')
-        print("Model File used for creating table : ",self.modelfile)
+        base, ext = os.path.splitext(filename)
+        self.modelfile = os.path.join(filepath, base + '.xml')
+        print("Model File used for creating table : ", self.modelfile)
         self.tree = ET.parse(self.modelfile)
-        self.root= self.tree.getroot()
+        self.root = self.tree.getroot()
         for elem in self.tree.iter(tag='ref_model'):
             self.ref_model = elem.text
         for elem in self.tree.iter(tag='model_name'):
             self.model_name = elem.text
-        row=0
+        row = 0
+        # get data from XML and store to dictionary (self.modeldict)
         for params in self.tree.findall('param'):
             for paramlist in params:
-                self.modeldict[paramlist.tag]= paramlist.text
-                row= row+1
+                self.modeldict[paramlist.tag] = paramlist.text
+                row = row + 1
         self.modeltable.setRowCount(row)
-        count =0
+        count = 0
+        # setItem in modeltable, for each item in modeldict
         for tags, values in list(self.modeldict.items()):
-            self.modeltable.setItem(count,0, QTableWidgetItem(tags))
+            self.modeltable.setItem(count, 0, QTableWidgetItem(tags))
             try:
                 valueitem = QTableWidgetItem(values)
-            except:
+            except BaseException:
                 pass
-            self.modeltable.setItem(count,1, valueitem)
-            count= count +1
-        self.modeltable.setHorizontalHeaderLabels(QtCore.QString("Parameters;Values").split(";")) 
+            self.modeltable.setItem(count, 1, valueitem)
+            count = count + 1
+        self.modeltable.setHorizontalHeaderLabels(
+            ("Parameters;Values").split(";")
+            )
         self.modeltable.show()
         self.modeltable.itemChanged.connect(self.edit_modeltable)
-        
+
+    '''
+    - Called when editing model inplace in QTableWidget
+    - Set states of other components
+    - Get data from the modeltable of the selected row
+    - Edit name and value as per needed
+    - Add the val name pair in the modeldict
+    '''
+
     def edit_modeltable(self):
         self.savebtn.setDisabled(False)
         try:
             indexitem = self.modeltable.currentItem()
-            name = str(indexitem.data(0).toString())
+            name = str(indexitem.data(0))
             rowno = indexitem.row()
-            para = self.modeltable.item(rowno,0)
-            val = str(para.data(0).toString())
-            self.modeldict[val]= name
-        except:
+            para = self.modeltable.item(rowno, 0)
+            val = str(para.data(0))
+            self.modeldict[val] = name
+        except BaseException:
             pass
-        
-    
+
+    '''
+    - Called when `Add` button clicked beside QTableWidget
+    - Open up dialog box to enter parameter and value accordingly
+    - Validate if parameter already in list of parameters
+    - Accordingly add parameter and value in modeldict as well as table
+    - text1 => parameter, text2 => value
+    '''
+
     def addparameters(self):
-        '''
-        This function is used to add new parameter in the table
-        '''
-        text1, ok = QtGui.QInputDialog.getText(self, 'Parameter','Enter Parameter')
+        text1, ok = QtGui.QInputDialog.getText(
+            self, 'Parameter', 'Enter Parameter')
         if ok:
             if text1 in list(self.modeldict.keys()):
                 self.msg = QtGui.QErrorMessage(self)
-                self.msg.showMessage("The paramaeter " + text1 + " is already in the list")
+                self.msg.showMessage(
+                    "The paramaeter " + text1 + " is already in the list")
                 self.msg.setWindowTitle("Error Message")
                 return
-            text2, ok = QtGui.QInputDialog.getText(self, 'Value','Enter Value')
-            if ok :
+            text2, ok = QtGui.QInputDialog.getText(
+                self, 'Value', 'Enter Value')
+            if ok:
                 currentRowCount = self.modeltable.rowCount()
                 self.modeltable.insertRow(currentRowCount)
-                self.modeltable.setItem(currentRowCount, 0, QTableWidgetItem(text1))
-                self.modeltable.setItem(currentRowCount, 1, QTableWidgetItem(text2))
-                self.modeldict[str(text1)]= str(text2)
+                self.modeltable.setItem(
+                    currentRowCount, 0, QTableWidgetItem(text1))
+                self.modeltable.setItem(
+                    currentRowCount, 1, QTableWidgetItem(text2))
+                self.modeldict[str(text1)] = str(text2)
             else:
                 pass
         else:
             pass
-        
-        
+
+    '''
+    - Called when save functon clicked
+    - If new file created, call `createXML` file
+    - Else call `savethefile`
+    '''
+
     def savemodelfile(self):
-        if self.newflag== 1:
+        if self.newflag == 1:
             self.createXML(self.model_name)
         else:
             self.savethefile(self.editfile)
-        
-     
-    def createXML(self,model_name):
-        '''
-        This function creates .xml and .lib files from the model table
-        '''
+
+    '''
+    - Create .xml and .lib file if new model is being created
+    - Save it in the corresponding compoenent directory, example Diode, IGBT..
+    - For each component, separate folder is there
+    - Check the contents of .lib and .xml file to understand their structure
+    '''
+
+    def createXML(self, model_name):
         root = ET.Element("library")
         ET.SubElement(root, "model_name").text = model_name
         ET.SubElement(root, "ref_model").text = self.modelname
@@ -336,98 +481,173 @@ class ModelEditorclass(QtGui.QWidget):
         defaultcwd = os.getcwd()
         self.savepath = '../deviceModelLibrary'
         if self.diode.isChecked():
-            savepath = os.path.join(self.savepath, 'Diode')  
+            savepath = os.path.join(self.savepath, 'Diode')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         if self.mos.isChecked():
-            savepath = os.path.join(self.savepath, 'MOS')  
+            savepath = os.path.join(self.savepath, 'MOS')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         if self.jfet.isChecked():
-            savepath = os.path.join(self.savepath, 'JFET')  
+            savepath = os.path.join(self.savepath, 'JFET')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         if self.igbt.isChecked():
-            savepath = os.path.join(self.savepath, 'IGBT')  
+            savepath = os.path.join(self.savepath, 'IGBT')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         if self.magnetic.isChecked():
-            savepath = os.path.join(self.savepath, 'Misc')  
+            savepath = os.path.join(self.savepath, 'Misc')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         if self.bjt.isChecked():
-            savepath = os.path.join(self.savepath, 'Transistor')  
+            savepath = os.path.join(self.savepath, 'Transistor')
             os.chdir(savepath)
-            txtfile = open(self.modelname+'.lib', 'w')
-            txtfile.write('.MODEL ' + self.modelname +' ' + self.model_name + '(\n' )
+            txtfile = open(self.modelname + '.lib', 'w')
+            txtfile.write(
+                '.MODEL ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                '(\n')
             for tags, text in list(self.modeldict.items()):
-                txtfile.write('+ ' + tags + '=' + text +'\n')
+                txtfile.write('+ ' + tags + '=' + text + '\n')
             txtfile.write(')')
-            tree.write(self.modelname +".xml")
-            self.obj_appconfig.print_info('New ' + self.modelname + ' ' + self.model_name + ' library created at ' + os.getcwd())
+            tree.write(self.modelname + ".xml")
+            self.obj_appconfig.print_info(
+                'New ' +
+                self.modelname +
+                ' ' +
+                self.model_name +
+                ' library created at ' +
+                os.getcwd())
         txtfile.close()
         os.chdir(defaultcwd)
-        
-    
-    def validation(self,text):
-        '''
-        This function checks if the file with the name already exists
-        '''
-        newfilename = text+'.xml'
-        
+
+    '''
+    - This function checks if the file (xml type) with the name already exists
+    - Accordingly show error message
+    '''
+
+    def validation(self, text):
+        newfilename = text + '.xml'
+
         all_dir = [x[0] for x in os.walk(self.savepathtest)]
         for each_dir in all_dir:
             all_files = os.listdir(each_dir)
             if newfilename in all_files:
                 self.msg = QtGui.QErrorMessage(self)
-                self.msg.showMessage('The file with name ' + text+ ' already exists.')
+                self.msg.showMessage(
+                    'The file with name ' + text + ' already exists.')
                 self.msg.setWindowTitle("Error Message")
 
-    
-    def savethefile(self,editfile):
-        '''
-        This function save the editing in the model table
-        '''
+    '''
+    - This function save the editing in the model table
+    - Create .lib and .xml file for the editfile path and replace them
+    - Also print Updated Library with libpath in the command window
+    '''
+
+    def savethefile(self, editfile):
         xmlpath, file = os.path.split(editfile)
         filename = os.path.splitext(file)[0]
-        libpath = os.path.join(xmlpath,filename+'.lib')
+        libpath = os.path.join(xmlpath, filename + '.lib')
         libfile = open(libpath, 'w')
-        libfile.write('.MODEL ' + self.ref_model +' ' + self.model_name + '(\n' )
+        libfile.write(
+            '.MODEL ' +
+            self.ref_model +
+            ' ' +
+            self.model_name +
+            '(\n')
         for tags, text in list(self.modeldict.items()):
-            libfile.write('+  ' + tags + '=' + text +'\n')
+            libfile.write('+  ' + tags + '=' + text + '\n')
         libfile.write(')')
         libfile.close()
-       
+
         root = ET.Element("library")
         ET.SubElement(root, "model_name").text = self.model_name
         ET.SubElement(root, "ref_model").text = self.ref_model
@@ -435,19 +655,35 @@ class ModelEditorclass(QtGui.QWidget):
         for tags, text in list(self.modeldict.items()):
             ET.SubElement(param, tags).text = text
         tree = ET.ElementTree(root)
-        
-        tree.write(os.path.join(xmlpath,filename +".xml"))
-        
+
+        tree.write(os.path.join(xmlpath, filename + ".xml"))
+
         self.obj_appconfig.print_info('Updated library ' + libpath)
+
+    '''
+    - Get the index of the current selected item
+    - Remove the whole row from QTable Widget
+    - Remove the param,value pair from modeldict
+    '''
 
     def removeparameter(self):
         self.savebtn.setDisabled(False)
         index = self.modeltable.currentIndex()
-        param = index.data().toString()
-        remove_item = self.modeltable.item(index.row(),0).text()
+        param = str(index.data())  # noqa
+        remove_item = self.modeltable.item(index.row(), 0).text()
         self.modeltable.removeRow(index.row())
         del self.modeldict[str(remove_item)]
-        
+
+    '''
+    - Called when upload button clicked
+    - Used to read file form a certain location for .lib extension
+    - Accordingly parse it and extract modelname and modelref
+    - Also extract param value pairs
+    - Take input the name of the library you want to save it as
+    - Save it in `User Libraries` with the given name,
+      and input from uploaded file
+    '''
+
     def converttoxml(self):
         os.chdir(self.savepathtest)
         self.addbtn.setHidden(True)
@@ -455,77 +691,94 @@ class ModelEditorclass(QtGui.QWidget):
         self.modeltable.setHidden(True)
         model_dict = {}
         stringof = []
-        self.libfile = str(QtGui.QFileDialog.getOpenFileName(self,"Open Library Directory","../deviceModelLibrary","*.lib"))
+        self.libfile = str(
+            QtGui.QFileDialog.getOpenFileName(
+                self,
+                "Open Library Directory",
+                "../deviceModelLibrary",
+                "*.lib"))
         libopen = open(self.libfile)
         filedata = libopen.read().split()
-        modelcount=0
+        modelcount = 0
         for words in filedata:
-            modelcount= modelcount +1
+            modelcount = modelcount + 1
             if words.lower() == '.model':
                 break
         ref_model = filedata[modelcount]
-        model_name = filedata[modelcount+1]
+        model_name = filedata[modelcount + 1]
         model_name = list(model_name)
-        modelnamecnt= 0
-        flag= 0
+        modelnamecnt = 0
+        flag = 0
         for chars in model_name:
-            modelnamecnt = modelnamecnt +1
+            modelnamecnt = modelnamecnt + 1
             if chars == '(':
                 flag = 1
                 break
-        if flag == 1 :
-            model_name = ''.join(model_name[0:modelnamecnt-1])
+        if flag == 1:
+            model_name = ''.join(model_name[0:modelnamecnt - 1])
         else:
             model_name = ''.join(model_name)
-            
+
         libopen1 = open(self.libfile)
         while True:
             char = libopen1.read(1)
             if not char:
                 break
             stringof.append(char)
-            
+
         count = 0
         for chars in stringof:
-            count = count +1
+            count = count + 1
             if chars == '(':
                 break
-        count1=0
+        count1 = 0
         for chars in stringof:
-            count1 = count1 +1
+            count1 = count1 + 1
             if chars == ')':
                 break
-        stringof = stringof[count:count1-1]
-        stopcount=[]
-        listofname = [] 
+        stringof = stringof[count:count1 - 1]
+        stopcount = []
+        listofname = []
         stopcount.append(0)
         count = 0
         for chars in stringof:
-            count = count +1
+            count = count + 1
             if chars == '=':
-                stopcount.append(count) 
+                stopcount.append(count)
         stopcount.append(count)
-        
+
         i = 0
         for no in stopcount:
             try:
-                listofname.append(''.join(stringof[int(stopcount[i]):int(stopcount[i+1])]))
-                i = i +1
-            except:
+                listofname.append(
+                    ''.join(stringof[int(stopcount[i]):int(stopcount[i + 1])]))
+                i = i + 1
+            except BaseException:
                 pass
-        listoflist =[]
-        listofname2 = [el.replace('\t', '').replace('\n', ' ').replace('+', '').replace(')', '').replace('=', '') for el in listofname]
-        listofname=[]
+        listoflist = []
+        listofname2 = [
+            el.replace(
+                '\t',
+                '').replace(
+                '\n',
+                ' ').replace(
+                '+',
+                '').replace(
+                    ')',
+                    '').replace(
+                        '=',
+                '') for el in listofname]
+        listofname = []
         for item in listofname2:
             listofname.append(item.rstrip().lstrip())
         for values in listofname:
             valuelist = values.split(' ')
             listoflist.append(valuelist)
         for i in range(1, len(listoflist)):
-            model_dict[listoflist[0][0]]=listoflist[1][0]
+            model_dict[listoflist[0][0]] = listoflist[1][0]
             try:
-                model_dict[listoflist[i][-1]]= listoflist[i+1][0]
-            except:
+                model_dict[listoflist[i][-1]] = listoflist[i + 1][0]
+            except BaseException:
                 pass
         root = ET.Element("library")
         ET.SubElement(root, "model_name").text = model_name
@@ -536,13 +789,14 @@ class ModelEditorclass(QtGui.QWidget):
         tree = ET.ElementTree(root)
 
         defaultcwd = os.getcwd()
-        savepath = os.path.join(self.savepathtest, 'User Libraries')  
-        savefilepath= os.path.join(savepath, model_name +".xml")
+        savepath = os.path.join(self.savepathtest, 'User Libraries')
+        savefilepath = os.path.join(savepath, model_name + ".xml")  # noqa
         os.chdir(savepath)
-        text, ok1 = QtGui.QInputDialog.getText(self, 'Model Name','Enter Model Library Name')
+        text, ok1 = QtGui.QInputDialog.getText(
+            self, 'Model Name', 'Enter Model Library Name')
         if ok1:
-            tree.write(text+".xml")
-            fileopen = open(text+".lib",'w')
+            tree.write(text + ".xml")
+            fileopen = open(text + ".lib", 'w')
             f = open(self.libfile)
             fileopen.write(f.read())
             f.close()
